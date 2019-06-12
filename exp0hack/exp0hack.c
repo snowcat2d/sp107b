@@ -91,7 +91,7 @@ int nextTemp() {
 
 void genOp1(int i, char c) {
   printf("# t%d=%c\n", i, c);
-  // t1=3 �ন @3; D=A; @t1; M=D  
+  // t1=3 轉成 @3; D=A; @t1; M=D 
   printf("@%c\n", c);
   if(isdigit(c))
     printf("D=A\n");
@@ -112,7 +112,7 @@ int isNext(char *set) {
 
 void genOp2(int i, int i1, char op, int i2) {
   printf("# t%d=t%d%ct%d\n", i, i1, op, i2);
-  // t0=t1+t2 �ন @t1; D=M; @t2; D=D+M; @t0; M=D;
+  // t0=t1+t2 轉成 @t1; D=M; @t2; D=D+M; @t0; M=D;
   printf("@t%d\n", i1);
   printf("D=M\n");
   printf("@t%d\n", i2);
