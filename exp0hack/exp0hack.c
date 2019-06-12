@@ -7,12 +7,6 @@ void parse(char *str);
 int E();
 int T();
 int F();
-char ch();
-char next();
-int nextTemp();
-void genOp1(int i, char c);
-int isNext(char *set);
-void genOp2(int i, int i1, char op, int i2);
 
 int tokenIdx = 0;
 char *tokens;
