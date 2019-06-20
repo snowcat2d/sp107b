@@ -55,7 +55,7 @@ int F() {
 // E = F (op E)*
 int E() {
   int i1 = F();
-  while (isNext("+ - * / & | ! < > =")) {
+  while (isNext("+ - * / & | ! < > =")) {  //詞彙解析器目前只支援1個字的運算
     char *op = next();
     int i2 = E();
     int i = nextTemp();
@@ -68,17 +68,38 @@ int E() {
 // ASSIGN = id '=' E;
 void ASSIGN() {
   char *id = next();
-  skip("="); //當辨別到＝時跳入skip涵式做執行next()
+  skip("=");
   int e = E();
-  skip(";");//當辨別到;時跳入skip涵式做執行next()
+  skip(";");
   emit("%s = t%d\n", id, e);
+}
+
+
+// IF = if (E) STMT (else STMT)?
+void IF() {
+  int elseLabel = nextLabel();
+  int endifLabel = nextLabel();
+  skip("if");
+  skip("(");
+  int e = E();
+  skip(")");
+  emit("if not T%d goto L%d\n", e, elseLabel);
+  STMT();
+  emit("if T%d goto L%d\n", e, endifLabel);
+  if (isNext("else")) {
+    emit("(L%d)\n", elseLabel);
+    skip("else");
+    STMT();
+  }
+  emit("(L%d)\n", endifLabel);
 }
 
 // while (E) STMT
 void WHILE() {
   int whileBegin = nextLabel();
   int whileEnd = nextLabel();
-  emit("(L%d)\n", whileBegin);//
+  emit("(L%d)\n", whileBegin);
+  skip("while");
   skip("(");
   int e = E();
   emit("if not T%d goto L%d\n", e, whileEnd);
@@ -88,30 +109,11 @@ void WHILE() {
   emit("(L%d)\n", whileEnd);
 }
 
-// IF = if (E) STMT
-void IF(){ 
-  int elseLabel = nextLabel();
-  int endifLabel = nextLabel();
-  skip("if");
-  skip("(");
-  int e = E();
-  skip(")");
-  emit("if not t%d goto L%d\n", e, elseLabel);
-  STMT();
-  emit("goto L%d\n",endifLabel);
-  if (isNext("else")){
-    emit("(L%d)\n", elseLabel);
-    skip("else");
-    STMT();
-  }
-  emit("(L%d)\n", endifLabel);
-}
-
 void STMT() {
   if (isNext("while"))
     return WHILE();
-  // else if (isNext("if"))
-  //   IF();
+  else if (isNext("if"))
+    IF();
   else if (isNext("{"))
     BLOCK();
   else
