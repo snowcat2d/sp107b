@@ -89,7 +89,7 @@ void WHILE() {
 }
 
 // IF = if (E) STMT
-void IF(){
+void IF(){ 
   int elseLabel = nextLabel();
   int endifLabel = nextLabel();
   skip("if");
