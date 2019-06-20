@@ -68,9 +68,9 @@ int E() {
 // ASSIGN = id '=' E;
 void ASSIGN() {
   char *id = next();
-  skip("=");
+  skip("="); //當辨別到＝時跳入skip涵式做執行next()
   int e = E();
-  skip(";");
+  skip(";");//當辨別到;時跳入skip涵式做執行next()
   emit("%s = t%d\n", id, e);
 }
 
@@ -78,8 +78,7 @@ void ASSIGN() {
 void WHILE() {
   int whileBegin = nextLabel();
   int whileEnd = nextLabel();
-  emit("(L%d)\n", whileBegin);
-  skip("while");
+  emit("(L%d)\n", whileBegin);//打印出 whileBegin
   skip("(");
   int e = E();
   emit("if not T%d goto L%d\n", e, whileEnd);
