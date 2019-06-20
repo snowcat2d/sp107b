@@ -78,7 +78,7 @@ void ASSIGN() {
 void WHILE() {
   int whileBegin = nextLabel();
   int whileEnd = nextLabel();
-  emit("(L%d)\n", whileBegin);//打印出 whileBegin
+  emit("(L%d)\n", whileBegin);//
   skip("(");
   int e = E();
   emit("if not T%d goto L%d\n", e, whileEnd);
